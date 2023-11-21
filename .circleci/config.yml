@@ -1,0 +1,18 @@
+jobs:
+  build:
+    docker:
+      - image: nixos/nix:latest
+
+    steps:
+      - restore_cache:
+          keys:
+            - my-cache-busted-busted
+      - checkout
+      - run: nix-channel --update
+      - run: nixos-rebuild --flake .
+      - run: nix-build .
+      - save_cache:
+          key: my-cache-busted-busted
+          paths:
+            - /root/.cache/nix
+
